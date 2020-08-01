@@ -1,0 +1,3 @@
+import os
+
+token = os.getenv('TG_HOLIDAY_BOT_TOKEN', '1310357688:AAF28QLKHRfQjeZ0l6Vfm_40C4rL6soB6WE')
