@@ -4,6 +4,7 @@ import logging
 
 from app.config import token
 from app.utils import messages
+from app.requests.holiday import HolidayRequests
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s :: %(levelname)s :: %(message)s')
