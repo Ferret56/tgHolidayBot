@@ -36,8 +36,14 @@ def send_holiday_by_country(message: Message):
                          .format(holiday_data.get('date'),
                                  holiday_data.get('title')))
     except CountryNotFoundException:
+        logging.warning({'message_send': {'chat_id': message.chat.id,
+                                          'sender_text': message.text,
+                                          'message': messages.COUNTRY_NOT_FOUND_MESSAGE}})
         bot.send_message(message.chat.id, messages.COUNTRY_NOT_FOUND_MESSAGE)
     except HolidayNotFoundException:
+        logging.warning({'message_send': {'chat_id': message.chat.id,
+                                          'sender_text': message.text,
+                                          'message': messages.HOLIDAY_NOT_FOUND_MESSAGE}})
         bot.send_message(message.chat.id, messages.HOLIDAY_NOT_FOUND_MESSAGE)
 
 
