@@ -1,6 +1,11 @@
 from bs4 import BeautifulSoup
 
 
+class ParsingException(Exception):
+    def __init__(self, message=None):
+        self.message = message
+
+
 class HolidayParser:
     @staticmethod
     def parse_holidays_country_page(holidays_page_html: str) -> dict:
@@ -8,8 +13,11 @@ class HolidayParser:
         :param holidays_page_html - html страница с праздниками по стране
         :return: словарь 'дата' -> 'праздник'
         """
-        li_tags = HolidayParser.get_li_tags_by_country_html_page(holidays_page_html)
-        holidays_dict = HolidayParser.parse_country_holidays_by_li_tags(li_tags)
+        try:
+            li_tags = HolidayParser.get_li_tags_by_country_html_page(holidays_page_html)
+            holidays_dict = HolidayParser.parse_country_holidays_by_li_tags(li_tags)
+        except Exception as ex:
+            raise ParsingException(str(ex))
         return holidays_dict
 
     @staticmethod
