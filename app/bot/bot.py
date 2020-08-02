@@ -5,6 +5,7 @@ import logging
 from app.config import token
 from app.utils import messages
 from app.requests.holiday import HolidayRequests
+from app.parsers.holiday import HolidayParser
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s :: %(levelname)s :: %(message)s')
@@ -30,6 +31,8 @@ def help_message(message: Message):
 def send_holiday_by_country(message: Message):
     logging.info({'message_received': {'chat_id': message.chat.id,
                                        'message': message.text}})
+    text = HolidayRequests.holidays_request_by_country(message.text)
+    HolidayParser.parse_holidays_country_page(text)
     bot.send_message(message.chat.id, messages.NOT_FOUNT_MESSAGE)
 
 
