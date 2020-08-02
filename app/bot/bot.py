@@ -3,9 +3,8 @@ from telebot.types import Message
 import logging
 
 from app.config import token
-from app.utils import messages
-from app.requests.holiday import HolidayRequests
-from app.parsers.holiday import HolidayParser
+from app.utils import messages, country_mapper
+from app.service.holiday import HolidayService, CountryNotFoundException
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s :: %(levelname)s :: %(message)s')
@@ -31,9 +30,13 @@ def help_message(message: Message):
 def send_holiday_by_country(message: Message):
     logging.info({'message_received': {'chat_id': message.chat.id,
                                        'message': message.text}})
-    text = HolidayRequests.holidays_request_by_country(message.text)
-    HolidayParser.parse_holidays_country_page(text)
-    bot.send_message(message.chat.id, messages.NOT_FOUNT_MESSAGE)
+    try:
+        holiday_data = HolidayService.get_current_holiday_in_country(message.text)
+        bot.send_message(message.chat.id, 'Дата: {}\nПраздник: {}'
+                         .format(holiday_data.get('date'),
+                                 holiday_data.get('title')))
+    except CountryNotFoundException:
+        bot.send_message(message.chat.id, messages.NOT_FOUNT_MESSAGE)
 
 
 bot.polling()
